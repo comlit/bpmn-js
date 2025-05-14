@@ -286,7 +286,7 @@ export function enableLogging(modeler, force) {
   saveXML && modeler.on('commandStack.changed', function() {
     Promise.resolve()
       .then(() => modeler.saveXML({ format: true }))
-      .then((result) => console.log(result.xml));
+      //.then((result) => console.log(result.xml));
   });
 }
 

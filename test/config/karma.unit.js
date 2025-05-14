@@ -9,7 +9,7 @@ var coverage = process.env.COVERAGE;
 
 // configures browsers to run test against
 // any of [ 'ChromeHeadless', 'Chrome', 'Firefox', 'Safari' ]
-var browsers = (process.env.TEST_BROWSERS || 'ChromeHeadless').split(',');
+var browsers = ['ChromeDebugging'];
 
 // use puppeteer provided Chrome for testing
 process.env.CHROME_BIN = require('puppeteer').executablePath();
@@ -54,6 +54,10 @@ module.exports = function(karma) {
         base: 'Firefox',
         flags: [ '-headless' ],
         profile: firefoxProfile
+      },
+      'ChromeDebugging': {
+        base: 'Chrome',
+        flags: [ '--remote-debugging-port=9333' ]
       }
     },
 
@@ -85,6 +89,18 @@ module.exports = function(karma) {
           {
             test: /\.css|\.bpmn$/,
             type: 'asset/source'
+          },
+          {
+            test: /\.js$/,
+            include: [
+              path.resolve(__dirname, '../../node_modules/diagram-js') // <-- adjust this if path is different
+            ],
+            use: {
+              loader: 'babel-loader',
+              options: {
+                sourceMaps: true
+              }
+            }
           }
         ].concat(
           coverage ? {
@@ -116,7 +132,7 @@ module.exports = function(karma) {
           absoluteBasePath
         ]
       },
-      devtool: 'eval-source-map'
+      devtool: 'inline-source-map'
     }
   };
 
