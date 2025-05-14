@@ -6,6 +6,18 @@ All notable changes to [bpmn-js](https://github.com/bpmn-io/bpmn-js) are documen
 
 ___Note:__ Yet to be released changes appear here._
 
+## 18.6.1
+
+* `FIX`: copy error, escalation, message and signal references when copying elements ([#1906](https://github.com/bpmn-io/bpmn-js/issues/1906), [#2249](https://github.com/bpmn-io/bpmn-js/issues/2249), [#2301](https://github.com/bpmn-io/bpmn-js/pull/2301))
+
+## 18.6.0
+
+* `FEAT`: support searching through arrays in popup menu ([bpmn-io/diagram-js#970](https://github.com/bpmn-io/diagram-js/pull/970))
+* `FEAT`: prioritize `search` over `description` when matching popup menu entries ([bpmn-io/diagram-js#963](https://github.com/bpmn-io/diagram-js/pull/963))
+* `FEAT`: sort `search` terms across all keys ([bpmn-io/diagram-js#963](https://github.com/bpmn-io/diagram-js/pull/963))
+* `FIX`: always select first search entry ([bpmn-io/diagram-js#967](https://github.com/bpmn-io/diagram-js/pull/967))
+* `DEPS`: update to `diagram-js@15.3.0`
+
 ## 18.5.0
 
 * `FEAT`: allow text annotations for message flows ([#2281](https://github.com/bpmn-io/bpmn-js/issues/2281))
@@ -73,6 +85,7 @@ ___Note:__ Yet to be released changes appear here._
 * Require `Node >= 20`
 * `Canvas` is now a focusable element and provides better support for native browser behaviors. Focus can be controlled with new `focus` and `restoreFocus` APIs ([bpmn-io/diagram-js#662](https://github.com/bpmn-io/diagram-js/pull/662)).
 * Keyboard is now implicitly bound to canvas SVG element. Calls to `keyboard.bind` and `keyboard.bindTo` now result with a descriptive console error and have no effect ([bpmn-io/diagram-js#662](https://github.com/bpmn-io/diagram-js/pull/662)).
+* Selection outline is no longer included in the viewer. If needed, add it as an additional module ([#2253](https://github.com/bpmn-io/bpmn-js/pull/2253)).
 
 ## 17.11.1
 
