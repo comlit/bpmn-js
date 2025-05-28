@@ -1,49 +1,74 @@
 import {
-  inject
+  inject,
+  bootstrapModeler,
 } from 'test/TestHelper';
 
-// import EventBus from 'diagram-js/lib/core/EventBus';
-// import BpmnCrossWindowCopyPaste from 'lib/features/copy-paste/BpmnCrossWindowCopyPaste';
+import EventBus from 'diagram-js/lib/core/EventBus';
+import bpmnCrossWindowCopyPasteModule from 'lib/features/copy-paste/';
+import bpmnCopyPasteModule from 'lib/features/copy-paste';
+import copyPasteModule from 'diagram-js/lib/features/copy-paste';
+import coreModule from 'lib/core';
+import modelingModule from 'lib/features/modeling';
 
 
-describe('features/window-copy-paste', function() {
+describe.only('features/window-copy-paste', function () {
 
-  // Test Reviver
-  describe('revive string', function() {
+  var testModules = [
+    bpmnCrossWindowCopyPasteModule,
+    bpmnCopyPasteModule,
+    copyPasteModule,
+    coreModule,
+    modelingModule
+  ];
+
+  var basicXML = require('./basic.bpmn')
+
+  beforeEach(bootstrapModeler(basicXML, {
+    modules: testModules
+  }));
+
+  describe('revive string', function () {
 
     // False JSON
-    it('should pass with valid JSON', inject(function(elementRegistry, BpmnCrossWindowCopyPaste, moddle) {
+    it('should pass with valid JSON', inject(function (elementRegistry, bpmnCrossWindowCopyPaste, moddle, copyPaste) {
 
       // create event
       var startEvent = elementRegistry.get('StartEvent_1'),
-          mockString = JSON.stringify(startEvent);
+        mockString = JSON.stringify(startEvent);
 
-      // revive mock string
-      var revivedEvent = JSON.parse(mockString, BpmnCrossWindowCopyPaste.createReviver(moddle));
+      copyPaste.copy(startEvent);
+
+      var reviver = bpmnCrossWindowCopyPasteModule.createReviver(moddle)
+
+      console.log(typeof copyPaste);
+
+      var revivedEvent = JSON.parse(mockString, reviver);
 
       // checks that system copy is identical to the input string.
       expect(revivedEvent).to.equal(startEvent);
     }));
 
     // Invalid JSON
-    it('should fail with invalid JSON', inject(function() {
+    it('should fail with invalid JSON', inject(function (bpmnCrossWindowCopyPaste, moddle) {
+      var mockString = 'invalid JSON string';
 
-      // create valid JSON
+      expect(function () {
+        JSON.parse(mockString, bpmnCrossWindowCopyPaste.createReviver(moddle));
+      }).to.throw('Unexpected token i in JSON at position 0');
 
-      // Check valid return
     }));
 
   });
 
   // Test copy/paste into system cliboard
-  describe('copy/paste into system clipboard', function() {
+  describe('copy/paste into system clipboard', function () {
 
     // Mock data into cliboard
-    it('should copy into system clipboard', inject(function(elementRegistry, copyPaste) {
+    it('should copy into system clipboard', inject(function (elementRegistry, copyPaste) {
 
       // create mock JSON string
       var startEvent = elementRegistry.get('StartEvent_1'),
-          mockString = JSON.stringify(startEvent);
+        mockString = JSON.stringify(startEvent);
 
       // triggers copy event, which triggers system copy.
       copyPaste.copy(startEvent);
